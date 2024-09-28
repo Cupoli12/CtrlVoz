@@ -82,39 +82,39 @@ except FileNotFoundError:
 
 st.write("Tap the button and speak:")
 
-# Customizing the Bokeh button
-stt_button = Button(label="Start", width=200)
-stt_button.js_on_event("button_click", CustomJS(code="""
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
- 
-    recognition.onresult = function (e) {
-        var value = "";
-        for (var i = e.resultIndex; i < e.results.length; ++i) {
-            if (e.results[i].isFinal) {
-                value += e.results[i][0].transcript;
-            }
-        }
-        if (value != "") {
-            document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: value}));
-        }
-    }
-    recognition.start();
-"""))
-
-# Wrap the button in a div and apply the 'pulse-button' CSS class
+# Wrap the blue Start button in a div and apply the 'pulse-button' CSS class
 st.markdown(
     """
     <div style="display: flex; justify-content: center;">
-        <button class="pulse-button">Start</button>
+        <button class="pulse-button" onclick="startRecognition()">Start</button>
     </div>
+    <script>
+    function startRecognition() {
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+ 
+        recognition.onresult = function (e) {
+            var value = "";
+            for (var i = e.resultIndex; i < e.results.length; ++i) {
+                if (e.results[i].isFinal) {
+                    value += e.results[i][0].transcript;
+                }
+            }
+            if (value != "") {
+                const event = new CustomEvent("GET_TEXT", {detail: value});
+                document.dispatchEvent(event);
+            }
+        }
+        recognition.start();
+    }
+    </script>
     """,
     unsafe_allow_html=True
 )
 
 result = streamlit_bokeh_events(
-    stt_button,
+    Button(label="", width=0),  # Removed the old "Start" button
     events="GET_TEXT",
     key="listen",
     refresh_on_update=False,
