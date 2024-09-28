@@ -12,10 +12,9 @@ import json
 st.markdown(
     """
     <style>
-    /* Custom background */
+    /* Custom background color */
     .stApp {
-        background-image: url("https://www.example.com/background.jpg"); /* Use a link to your preferred image */
-        background-size: cover;
+        background-color: black;
     }
 
     /* Header styling */
@@ -132,6 +131,10 @@ if result and "GET_TEXT" in result:
     
     message = json.dumps({"Act1": recognized_text})
     ret = client1.publish("voice_ctrl", message)
+
+# Ensure 'temp' directory exists
+os.makedirs("temp", exist_ok=True)
+
 
 # Ensure 'temp' directory exists
 os.makedirs("temp", exist_ok=True)
