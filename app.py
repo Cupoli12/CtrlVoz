@@ -33,18 +33,18 @@ st.markdown(
         margin-bottom: 20px;
     }
 
-    /* Pulsing animation for button */
+    /* Enlarged and blue Start button with pulsing animation */
     .pulse-button {
         animation: pulse 1.5s infinite;
-        background-color: #e74c3c;
+        background-color: #3498db;
         border: none;
         color: white;
-        padding: 15px 32px;
+        padding: 20px 40px;  /* Increased padding for a bigger button */
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
+        font-size: 20px;  /* Larger font size */
+        margin: 10px 2px;
         cursor: pointer;
         border-radius: 8px;
         box-shadow: 0px 4px 6px #00000040;
@@ -53,15 +53,15 @@ st.markdown(
     @keyframes pulse {
         0% {
             transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
         }
         70% {
             transform: scale(1.1);
-            box-shadow: 0 0 15px 15px rgba(231, 76, 60, 0);
+            box-shadow: 0 0 20px 20px rgba(52, 152, 219, 0);
         }
         100% {
             transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
         }
     }
     </style>
@@ -103,6 +103,16 @@ stt_button.js_on_event("button_click", CustomJS(code="""
     recognition.start();
 """))
 
+# Wrap the button in a div and apply the 'pulse-button' CSS class
+st.markdown(
+    """
+    <div style="display: flex; justify-content: center;">
+        <button class="pulse-button">Start</button>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 result = streamlit_bokeh_events(
     stt_button,
     events="GET_TEXT",
@@ -131,10 +141,6 @@ if result and "GET_TEXT" in result:
     
     message = json.dumps({"Act1": recognized_text})
     ret = client1.publish("voice_ctrl", message)
-
-# Ensure 'temp' directory exists
-os.makedirs("temp", exist_ok=True)
-
 
 # Ensure 'temp' directory exists
 os.makedirs("temp", exist_ok=True)
